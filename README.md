@@ -47,7 +47,7 @@ The bottom gap is measured as `scrollHeight - clientHeight - scrollTop`. In the 
 - No network data, streaming, patched SDK, mocked observers, or custom scroll compensation.
 - DOM diagnostics live in a separate sibling component, so their updates do not rerender the virtualized list.
 
-The package lock pins all dependencies. On the verification date, these were the latest published React adapter and core versions. Their shipped source files (`react-virtual/src/index.tsx`, `virtual-core/src/index.ts`, and `virtual-core/src/utils.ts`) were byte-identical to upstream main at [`789f5c2`](https://github.com/TanStack/virtual/tree/789f5c2c8cfdf728a37751ce4f594e3173b718df). The browser run used the published packages, not a separate main build.
+The package lock pins all dependencies. On the verification date, these were the latest published versions of the listed packages. Their shipped source files (`react-virtual/src/index.tsx`, `virtual-core/src/index.ts`, and `virtual-core/src/utils.ts`) were byte-identical to upstream main at [`789f5c2`](https://github.com/TanStack/virtual/tree/789f5c2c8cfdf728a37751ce4f594e3173b718df). The browser run used the published packages, not a separate main build.
 
 ## Implementation lead
 
@@ -64,11 +64,11 @@ This is a reproduction, not a proposed fix. A fix should distinguish an overlapp
 
 Expected: cached keys match the current messages, and Message 9 stays at the viewport top. Because its index changes from 8 to 7, preserving that position requires `scrollTop` to change from 400 to 350 px. The published core leaves it at 400 px.
 
-This page sets `anchorTo: 'end'` and **`followOnAppend: false`**, so the result does not depend on append-follow behavior. It calls `Virtualizer` directly with the SDK's standard element observers, scrolling function, and adapter lifecycle. Only the virtual range (including overscan) is rendered. There are no private measurement-cache reads, mocked observers, dynamic row heights, or custom scroll compensation. See [`src/cache.js`](src/cache.js).
+This page sets `anchorTo: 'end'` and **`followOnAppend: false`**, so the result does not depend on append-follow behavior. It calls `Virtualizer` directly with the SDK's standard element observers, scrolling function, and lifecycle hooks. Only the virtual range (including overscan) is rendered. There are no private measurement-cache reads, mocked observers, dynamic row heights, or custom scroll compensation. See [`src/cache.js`](src/cache.js).
 
 The callback reads the current array, which is replaced before `setOptions` receives the updated options. Previously rendered measurements retain old keys, while unread lazy measurements resolve their keys against the new array. In this case, the old edge keys have not been read; resolving them during change detection makes them look identical to the new edges, so the core misses the window shift.
 
-This is a vanilla-core reproduction; it does not establish that every framework adapter's render lifecycle exposes the same failure. The React page above uses a callback that changes with its immutable message array and demonstrates the separate append-follow problem.
+This page exercises `Virtualizer` directly. Its failure depends on a stable callback reading the current array and on when lazy keys are first accessed. The React page above uses a callback that changes with its immutable message array and demonstrates the separate append-follow problem.
 
 Verified on 2026-09-08 in Chrome using production builds: the published core produced 8 mismatches and moved Message 9 by -50 px; a local candidate core fix produced 0 mismatches and kept Message 9 at 0 px (`scrollTop: 350`). The public pages use the published packages only.
 

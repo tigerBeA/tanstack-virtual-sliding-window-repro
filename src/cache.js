@@ -67,7 +67,7 @@ function reset() {
   advance.onclick = () => {
     messages = [...messages.slice(1), messages.at(-1) + 1];
     virtualizer.setOptions({ ...virtualizer.options, count: messages.length });
-    // Commit the new layout before the adapter lifecycle applies its anchor.
+    // Commit the new layout before the pending anchor is applied.
     render(virtualizer);
     virtualizer._willUpdate();
     render(virtualizer);
