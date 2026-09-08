@@ -1,0 +1,53 @@
+--- a/packages/virtual-core/src/index.ts
++++ b/packages/virtual-core/src/index.ts
+@@ -627,11 +627,38 @@
+ 
+         if (
+           behavior &&
+-          nextCount > prevCount &&
++          nextCount > 0 &&
+           this.isAtEnd(prevOptions.scrollEndThreshold) &&
+           (prevCount === 0 || merged.getItemKey(nextCount - 1) !== prevLastKey)
+         ) {
+-          followOnAppend = behavior
++          let didAppend = nextCount > prevCount
++
++          // A sliding window can append while trimming older items.
++          if (!didAppend) {
++            const firstKey = merged.getItemKey(0)
++            const removedKeys = new Set<Key>()
++            let removedCount = 0
++            while (removedCount < prevCount) {
++              const key = measurements[removedCount]!.key
++              if (key === firstKey) break
++              removedKeys.add(key)
++              removedCount++
++            }
++
++            const retainedCount = prevCount - removedCount
++            didAppend = retainedCount > 0 && retainedCount < nextCount
++            for (let i = 0; didAppend && i < nextCount; i++) {
++              const key = merged.getItemKey(i)
++              didAppend =
++                i < retainedCount
++                  ? key === measurements[removedCount + i]!.key
++                  : !removedKeys.has(key)
++            }
++          }
++
++          if (didAppend) {
++            followOnAppend = behavior
++          }
+         }
+       }
+     }
+@@ -672,7 +699,8 @@
+           // (rubber-band), and a negative tracked offset never self-heals
+           // when the element cannot scroll (#1229).
+           const newOffset = Math.max(0, anchorItem.start + anchorOffset)
+-          if (newOffset !== this.scrollOffset) {
++          // A no-op end scroll emits no event to correct a reading-anchor offset.
++          if (!followOnAppend && newOffset !== this.scrollOffset) {
+             anchorDelta = newOffset - this.scrollOffset
+             this.scrollOffset = newOffset
+             anchorResolved = true

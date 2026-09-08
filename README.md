@@ -6,6 +6,8 @@ A standalone React reproduction using published `@tanstack/react-virtual@3.14.11
 
 A [separate cache reproduction](https://tigerbea.github.io/tanstack-virtual-sliding-window-repro/cache.html) uses the same published core with append following disabled. It demonstrates stale item keys and a lost reading anchor when a stable key callback reads updated data.
 
+[Performance measurements for the proposed fix](performance/README.md) document the comparison baseline, resize overhead, browser update and scroll timings, recorded results, and measurement limits.
+
 ## Reproduce
 
 1. Open the preview and confirm **Actual bottom gap: 0.00 px**.

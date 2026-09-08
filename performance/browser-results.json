@@ -1,0 +1,150 @@
+{
+  "environment": {
+    "browser": "Chrome 152.0.0.0",
+    "visibility": "visible",
+    "react": "19.2.8",
+    "reactVirtual": "3.14.11",
+    "rowHeight": 50,
+    "viewportHeight": 300,
+    "timingDecimals": 4
+  },
+  "baseline": "Saved local sliding-window fix before the measurement-key correction, not the unmodified upstream release",
+  "windowMetric": "Data update through synchronous React commit and forced DOM layout, excluding paint and later animation-frame callbacks",
+  "windows": [
+    {
+      "count": 20,
+      "variant": "before",
+      "samples": 80,
+      "meanMs": 1.2625,
+      "medianMs": 1.3,
+      "p95Ms": 1.7,
+      "maxMs": 1.8,
+      "correct": true
+    },
+    {
+      "count": 20,
+      "variant": "after",
+      "samples": 80,
+      "meanMs": 1.1688,
+      "medianMs": 1.3,
+      "p95Ms": 1.6,
+      "maxMs": 1.6,
+      "correct": true
+    },
+    {
+      "count": 1000,
+      "variant": "before",
+      "samples": 80,
+      "meanMs": 1.3637,
+      "medianMs": 1.4,
+      "p95Ms": 1.7,
+      "maxMs": 2.1,
+      "correct": true
+    },
+    {
+      "count": 1000,
+      "variant": "after",
+      "samples": 80,
+      "meanMs": 1.2013,
+      "medianMs": 1.2,
+      "p95Ms": 1.4,
+      "maxMs": 1.6,
+      "correct": true
+    },
+    {
+      "count": 10000,
+      "variant": "before",
+      "samples": 80,
+      "meanMs": 2.7525,
+      "medianMs": 2.8,
+      "p95Ms": 3.4,
+      "maxMs": 3.8,
+      "correct": true
+    },
+    {
+      "count": 10000,
+      "variant": "after",
+      "samples": 80,
+      "meanMs": 1.2987,
+      "medianMs": 1.4,
+      "p95Ms": 1.7,
+      "maxMs": 1.8,
+      "correct": true
+    }
+  ],
+  "scrollMetric": "Actual native wheel callback through SDK, synchronous React work and forced layout; scroll-stop callbacks and paint excluded",
+  "scroll": [
+    {
+      "variant": "before",
+      "count": 100000,
+      "samples": 18,
+      "meanMs": 1.0556,
+      "medianMs": 1.0,
+      "p95Ms": 1.8,
+      "maxMs": 1.8,
+      "minOffset": 906,
+      "maxOffset": 6040,
+      "correct": true
+    },
+    {
+      "variant": "after",
+      "count": 100000,
+      "samples": 18,
+      "meanMs": 0.95,
+      "medianMs": 0.9,
+      "p95Ms": 1.3,
+      "maxMs": 1.3,
+      "minOffset": 906,
+      "maxOffset": 6040,
+      "correct": true
+    },
+    {
+      "variant": "after",
+      "count": 100000,
+      "samples": 18,
+      "meanMs": 1.3111,
+      "medianMs": 1.3,
+      "p95Ms": 2.1,
+      "maxMs": 2.1,
+      "minOffset": 906,
+      "maxOffset": 6040,
+      "correct": true
+    },
+    {
+      "variant": "before",
+      "count": 100000,
+      "samples": 18,
+      "meanMs": 0.9333,
+      "medianMs": 0.9,
+      "p95Ms": 1.4,
+      "maxMs": 1.4,
+      "minOffset": 906,
+      "maxOffset": 6040,
+      "correct": true
+    },
+    {
+      "variant": "before",
+      "count": 100000,
+      "samples": 38,
+      "meanMs": 1.7132,
+      "medianMs": 1.2,
+      "p95Ms": 2.4,
+      "maxMs": 19.7,
+      "minOffset": 906,
+      "maxOffset": 12080,
+      "correct": true
+    },
+    {
+      "variant": "after",
+      "count": 100000,
+      "samples": 38,
+      "meanMs": 1.0974,
+      "medianMs": 1.0,
+      "p95Ms": 1.6,
+      "maxMs": 2.1,
+      "minOffset": 906,
+      "maxOffset": 12080,
+      "correct": true
+    }
+  ]
+}

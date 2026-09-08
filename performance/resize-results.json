@@ -1,0 +1,32 @@
+{
+  "resize": [
+    {
+      "index": 0,
+      "beforeMs": 13.824166000000005,
+      "afterMs": 14.999375000000015,
+      "ratio": 1.0850112042925417
+    },
+    {
+      "index": 1,
+      "beforeMs": 14.304499999999962,
+      "afterMs": 15.942459000000042,
+      "ratio": 1.1145065538816517
+    },
+    {
+      "index": 9999,
+      "beforeMs": 0.41437499999995,
+      "afterMs": 0.27616599999998925,
+      "ratio": 0.6664639517345945
+    }
+  ],
+  "memory": {
+    "before": {
+      "heapBytesPerList": 808486.4,
+      "arrayBufferBytesPerList": 1600000
+    },
+    "after": {
+      "heapBytesPerList": 809168,
+      "arrayBufferBytesPerList": 1600000
+    }
+  }
+}
