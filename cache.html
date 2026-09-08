@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TanStack Virtual: cached item identity</title>
+    <script type="module" crossorigin src="./assets/cache-D_N8HWpK.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/style-CGvO8iOD.js">
+    <link rel="stylesheet" crossorigin href="./assets/style-BqlRCKFU.css">
+  </head>
+  <body>
+    <main>
+      <h1>Cached item keys lose their identity</h1>
+      <p class="versions">virtual-core 3.17.9 · vanilla core fixture</p>
+      <p>
+        Message 9 starts at the top. Click <b>Trim oldest + append</b> once.
+        Expected: Message 9 stays in place, and every cached key matches its
+        data ID.
+      </p>
+      <p><code>anchorTo: "end", followOnAppend: false</code></p>
+      <div class="actions">
+        <button id="cache-advance">Trim oldest + append</button>
+        <button id="cache-reset">Reset cache example</button>
+      </div>
+      <p id="cache-range"></p>
+      <div
+        id="cache-viewport"
+        tabindex="0"
+        aria-label="Cache identity messages"
+      >
+        <div id="cache-sizer"></div>
+      </div>
+      <section class="metrics" aria-live="polite">
+        <p>
+          Cached keys different from data IDs:
+          <strong id="cache-mismatches">0</strong> (expected: 0)
+        </p>
+        <p>Actual scrollTop: <span id="cache-offset"></span> px</p>
+      </section>
+      <p class="note">
+        The same getItemKey callback reads the current message array before and
+        after the update. The array is replaced, then setOptions receives the
+        new options. Only the virtual range (including overscan) is rendered;
+        the first and last item keys are not read by this fixture before the
+        update. Native CSS scroll anchoring is disabled.
+      </p>
+      <p class="note">
+        This uses Virtualizer directly with the SDK's standard element observers
+        and scrolling function. It calls the adapter lifecycle after committing
+        the DOM and performs no custom scroll compensation.
+      </p>
+      <p>
+        <a href="./">Window-follow reproduction</a> ·
+        <a
+          href="https://github.com/tigerBeA/tanstack-virtual-sliding-window-repro/blob/main/src/cache.js"
+          >Cache fixture source</a
+        >
+      </p>
+    </main>
+  </body>
+</html>
