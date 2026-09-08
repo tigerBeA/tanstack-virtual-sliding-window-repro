@@ -136,6 +136,9 @@ function App() {
   return (
     <main>
       <h1>Fixed-window append loses tail follow</h1>
+      <p>
+        <a href="./cache.html">Separate reproduction: cached item identity</a>
+      </p>
       <p className="versions">
         react-virtual 3.14.11 / virtual-core 3.17.9 / React 19.2.8
       </p>

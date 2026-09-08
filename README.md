@@ -4,6 +4,8 @@
 
 A standalone React reproduction using published `@tanstack/react-virtual@3.14.11`, `@tanstack/virtual-core@3.17.9`, and React 19.2.8. Appending a new message while trimming the oldest one keeps the count at 20, but an end-pinned viewport moves away from the bottom despite `followOnAppend: true`.
 
+A [separate cache reproduction](https://tigerbea.github.io/tanstack-virtual-sliding-window-repro/cache.html) uses the same published core with append following disabled. It demonstrates stale item keys and a lost reading anchor when a stable key callback reads updated data.
+
 ## Reproduce
 
 1. Open the preview and confirm **Actual bottom gap: 0.00 px**.
@@ -52,6 +54,23 @@ The package lock pins all dependencies. On the verification date, these were the
 The core's [`setOptions` append-follow condition](https://github.com/TanStack/virtual/blob/789f5c2c8cfdf728a37751ce4f594e3173b718df/packages/virtual-core/src/index.ts#L624) requires `nextCount > prevCount`. This fixture changes the edge keys without increasing the count, so it takes the visible-item anchoring path rather than following the new tail.
 
 This is a reproduction, not a proposed fix. A fix should distinguish an overlapping window moving forward from wholesale replacement, reordering, or trimming alone; changing the last key is not sufficient evidence of an append.
+
+## Cached item identity (separate core fixture)
+
+1. Open [the cache page](https://tigerbea.github.io/tanstack-virtual-sliding-window-repro/cache.html). Message 9 starts at the viewport top; all rendered keys match their message IDs.
+2. Click **Trim oldest + append** once. The message array changes from `[1…20]` to `[2…21]`, retaining the same `getItemKey` function.
+3. Observe 8 mismatched keys: for example, Message 10 has cached key 9. Message 9 has moved 50 px above the viewport top.
+4. Click **Reset cache example** to repeat.
+
+Expected: cached keys match the current messages, and Message 9 stays at the viewport top. Because its index changes from 8 to 7, preserving that position requires `scrollTop` to change from 400 to 350 px. The published core leaves it at 400 px.
+
+This page sets `anchorTo: 'end'` and **`followOnAppend: false`**, so the result does not depend on append-follow behavior. It calls `Virtualizer` directly with the SDK's standard element observers, scrolling function, and adapter lifecycle. Only the virtual range (including overscan) is rendered. There are no private measurement-cache reads, mocked observers, dynamic row heights, or custom scroll compensation. See [`src/cache.js`](src/cache.js).
+
+The callback reads the current array, which is replaced before `setOptions` receives the updated options. Previously rendered measurements retain old keys, while unread lazy measurements resolve their keys against the new array. In this case, the old edge keys have not been read; resolving them during change detection makes them look identical to the new edges, so the core misses the window shift.
+
+This is a vanilla-core reproduction; it does not establish that every framework adapter's render lifecycle exposes the same failure. The React page above uses a callback that changes with its immutable message array and demonstrates the separate append-follow problem.
+
+Verified on 2026-09-08 in Chrome using production builds: the published core produced 8 mismatches and moved Message 9 by -50 px; a local candidate core fix produced 0 mismatches and kept Message 9 at 0 px (`scrollTop: 350`). The public pages use the published packages only.
 
 ## Run locally
 
